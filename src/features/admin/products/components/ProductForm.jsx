@@ -26,14 +26,35 @@ const ProductForm = ({ initialValues, categories, onSubmit, isSubmitting, onRemo
     },
   });
 
-  const submitHandler = (formData) => {
+  // const submitHandler = (formData) => {
+  //   const form = new FormData();
+  //   Object.entries(formData).forEach(([key, value]) => {
+  //     if (value !== undefined && value !== null && value !== '') {
+  //       form.append(key, value);
+  //     }
+  //   });
+  //   newFiles.forEach((file) => form.append('images', file));
+  //   onSubmit(form);
+  // };
+
+
+  const submitHandler = (data) => {
     const form = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+
+      if (key === 'tags') {
+        form.append(key, value);
+      } else if (key === 'variants' || key === 'specifications') {
+        form.append(key, JSON.stringify(value));
+      } else {
         form.append(key, value);
       }
     });
+
     newFiles.forEach((file) => form.append('images', file));
+
     onSubmit(form);
   };
 

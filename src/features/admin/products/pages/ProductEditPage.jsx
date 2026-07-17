@@ -29,6 +29,7 @@ const ProductEditPage = () => {
   }, [dispatch, id, isNew]);
 
   const handleSubmit = async (formData) => {
+    
     setIsSubmitting(true);
     const result = isNew
       ? await dispatch(createProduct(formData))
