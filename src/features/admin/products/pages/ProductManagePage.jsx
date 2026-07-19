@@ -19,7 +19,7 @@ const ProductManagePage = () => {
   }, [dispatch, page]);
 
   return (
-    <div>
+    <div> 
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Manage Products</h1>
         <Link to="/admin/products/new">

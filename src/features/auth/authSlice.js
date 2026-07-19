@@ -29,6 +29,17 @@ export const login = createAsyncThunk('auth/login', async (payload, { dispatch, 
   }
 });
 
+// authSlice.js
+export const verifyEmail = createAsyncThunk( 'auth/verifyEmail', async (token, { rejectWithValue }) => {
+    try {
+      const { data } = await authAPI.verifyEmailRequest(token);
+      return data.data.user;
+    } catch (error) {
+      return rejectWithValue(extractErrorMessage(error));
+    }
+  }
+);
+
 export const mergeCartAfterAuth = createAsyncThunk('auth/mergeCart', async (_, { dispatch }) => {
   try {
     const guestId = getGuestId();

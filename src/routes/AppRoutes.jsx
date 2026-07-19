@@ -34,6 +34,7 @@ import AdminOrderDetailsPage from '../features/admin/orders/pages/AdminOrderDeta
 import UserManagePage from '../features/admin/users/pages/UserManagePage.jsx';
 import CouponManagePage from '../features/admin/coupons/pages/CouponManagePage.jsx';
 import ReviewManagePage from '../features/admin/reviews/pages/ReviewManagePage.jsx';
+import VerifyEmailPage from '../features/auth/pages/VerifyEmailPage.jsx';
 
 const AppRoutes = () => (
   <Routes>
@@ -58,6 +59,7 @@ const AppRoutes = () => (
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />

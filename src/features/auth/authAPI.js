@@ -7,6 +7,6 @@ export const fetchCurrentUser = () => axiosInstance.get('/auth/me');
 export const forgotPassword = (payload) => axiosInstance.post('/auth/forgot-password', payload);
 export const resetPassword = (payload) => axiosInstance.post('/auth/reset-password', payload);
 export const updatePassword = (payload) => axiosInstance.patch('/auth/update-password', payload);
-export const verifyEmail = (token) => axiosInstance.get(`/auth/verify-email/${token}`);
+export const verifyEmailRequest = (token) => axiosInstance.get(`/auth/verify-email/${token}`);
 export const resendVerificationEmail = () => axiosInstance.post('/auth/resend-verification');
 export const mergeGuestCart = (guestId) => axiosInstance.post('/cart/merge', { guestId });
