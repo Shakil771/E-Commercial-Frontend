@@ -16,7 +16,9 @@ const VerifyEmailPage = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    console.log('Calling verifyEmail API');
     const verify = async () => {
+      console.log('Calling verifyEmail API');
       if (!token) {
         setStatus('error');
         setMessage('No verification token provided.');

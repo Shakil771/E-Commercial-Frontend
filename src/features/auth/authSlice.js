@@ -10,9 +10,7 @@ const extractErrorMessage = (error) =>
 export const register = createAsyncThunk('auth/register', async (payload, { dispatch, rejectWithValue }) => {
   try {
     const { data } = await authAPI.registerUser(payload);
-    sessionStorage.setItem(ACCESS_TOKEN_KEY, data.data.accessToken);
-    await dispatch(mergeCartAfterAuth());
-    return data.data.user;
+    return data;
   } catch (error) {
     return rejectWithValue(extractErrorMessage(error));
   }
@@ -30,14 +28,14 @@ export const login = createAsyncThunk('auth/login', async (payload, { dispatch, 
 });
 
 // authSlice.js
-export const verifyEmail = createAsyncThunk( 'auth/verifyEmail', async (token, { rejectWithValue }) => {
-    try {
-      const { data } = await authAPI.verifyEmailRequest(token);
-      return data.data.user;
-    } catch (error) {
-      return rejectWithValue(extractErrorMessage(error));
-    }
+export const verifyEmail = createAsyncThunk('auth/verifyEmail', async (token, { rejectWithValue }) => {
+  try {
+    const { data } = await authAPI.verifyEmailRequest(token);
+    return data.data.user;
+  } catch (error) {
+    return rejectWithValue(extractErrorMessage(error));
   }
+}
 );
 
 export const mergeCartAfterAuth = createAsyncThunk('auth/mergeCart', async (_, { dispatch }) => {
@@ -123,10 +121,12 @@ const authSlice = createSlice({
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action) => {
+
+      .addCase(register.fulfilled, (state) => {
         state.status = 'succeeded';
-        state.user = action.payload;
-        state.isAuthenticated = true;
+        state.error = null;
+        state.user = null;
+        state.isAuthenticated = false;
       })
       .addCase(register.rejected, (state, action) => {
         state.status = 'failed';
