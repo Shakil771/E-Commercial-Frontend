@@ -6,12 +6,16 @@ import { register as registerUser, clearAuthError } from '../authSlice.js';
 import Input from '../../../components/common/Input.jsx';
 import Button from '../../../components/common/Button.jsx';
 import { showError, showSuccess } from '../../../components/common/Toast.jsx';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for password visibility
+
   const { status } = useAppSelector((state) => state.auth);
   const {
     register,
@@ -37,17 +41,6 @@ const RegisterForm = () => {
     }
   };
 
-  // const onSubmit = async (formData) => {
-  //   dispatch(clearAuthError());
-  //   const { confirmPassword, ...payload } = formData;
-  //   const result = await dispatch(registerUser(payload));
-  //   if (registerUser.fulfilled.match(result)) {
-  //     showSuccess('Account created successfully!');
-  //     navigate('/', { replace: true });
-  //   } else {
-  //     showError(result.payload || 'Registration failed');
-  //   }
-  // };
 
   return (
     <>
@@ -75,28 +68,58 @@ const RegisterForm = () => {
           })}
         />
 
-        <Input
-          label="Password"
-          type="password"
-          placeholder="At least 8 characters"
-          error={errors.password?.message}
-          {...register('password', {
-            required: 'Password is required',
-            minLength: { value: 8, message: 'Password must be at least 8 characters' },
-            pattern: { value: /^(?=.*[a-zA-Z])(?=.*\d).+$/, message: 'Include at least one letter and one number' },
-          })}
-        />
 
-        <Input
-          label="Confirm password"
-          type="password"
-          placeholder="Re-enter your password"
-          error={errors.confirmPassword?.message}
-          {...register('confirmPassword', {
-            required: 'Please confirm your password',
-            validate: (value) => value === password || 'Passwords do not match',
-          })}
-        />
+        <div className='relative'>
+          <Input
+            className="w-full py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" // Add padding for the eye icon
+            label="Password"
+            type={showPassword ? "text" : "password"} // Toggle type based on showPassword state
+            placeholder="At least 8 characters"
+            error={errors.password?.message}
+            {...register('password', {
+              required: 'Password is required',
+              minLength: { value: 8, message: 'Password must be at least 8 characters' },
+              validate: {
+                hasNumber: (v) => /\d/.test(v) || 'Must contain at least one number',
+                hasLetter: (v) => /[A-Za-z]/.test(v) || 'Must contain at least one letter',
+              },
+            })}
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:font-bold pt-6"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />} {/* Eye icon */}
+          </button>
+        </div>
+
+
+        <div className='relative'>
+          <Input
+            label="Confirm password"
+            className="w-full py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" // Add padding for the eye icon
+            type={showConfirmPassword ? "text" : "password"} // Toggle type based on showPassword state
+            placeholder="Re-enter your password"
+            error={errors.confirmPassword?.message}
+            {...register('confirmPassword', {
+              required: 'Please confirm your password',
+              validate: (value) => value === password || 'Passwords do not match',
+            })}
+
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle showPassword state
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:font-bold pt-6"
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"
+            }          >
+            {showConfirmPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />} {/* Eye icon */}
+          </button>
+        </div>
 
         <Button type="submit" className="w-full" isLoading={status === 'loading'}>
           Create Account
